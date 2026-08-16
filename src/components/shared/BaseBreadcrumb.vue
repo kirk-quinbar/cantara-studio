@@ -1,65 +1,40 @@
-<script setup lang="ts">
-/**
- * BaseBreadcrumb Component
- *
- * @component BaseBreadcrumb
- * @description A reusable breadcrumb component using Bootstrap Vue.
- *
- * @prop {string} title - The title displayed at the top of the breadcrumb.
- * @prop {BreadcrumbItem[]} breadcrumbs - Array of breadcrumb items to display in the breadcrumb trail.
- *
- * @computed {BreadcrumbItem[]} computedBreadcrumbs - Ensures the Home link is always included before rendering the breadcrumb list.
- */
-
-import { computed } from "vue";
-
-// third party
-import { BBreadcrumb, BRow, BCol } from "bootstrap-vue-next";
-import { type BreadcrumbItem } from "bootstrap-vue-next";
-
-// Define Props
-const props = defineProps<{
-  title: string;
-  breadcrumbs: BreadcrumbItem[];
-}>();
-
-// Ensure Home link is always present
-const computedBreadcrumbs = computed<BreadcrumbItem[]>(() => [
-  { text: "Home", to: "/" },
-  ...props.breadcrumbs,
-]);
+<script setup>
+import BreadcrumbChart from './BreadcrumbChart.vue';
+const props = defineProps({
+    title: String,
+    breadcrumbs: Array,
+    icon: String,
+    text: String
+});
 </script>
 
 <template>
-  <!-- [ breadcrumb ] start -->
-  <div class="page-header">
-    <div class="page-block">
-      <BRow>
-        <BCol md="12">
-          <div class="page-header-title">
-            <h5 class="mb-0">{{ title }}</h5>
-          </div>
-        </BCol>
-        <BCol md="12">
-          <BBreadcrumb :items="computedBreadcrumbs" />
-        </BCol>
-      </BRow>
+    <div class="mt-3 mb-6">
+        <div class="d-flex justify-space-between">
+            <div class="d-flex py-0 align-center">
+                <div>
+                    <h3 class="text-h5 card-title">{{ title }}</h3>
+                    <v-breadcrumbs :items="breadcrumbs" class="text-subtitle-1 textSecondary pa-0 ml-n1">
+                        <template v-slot:divider v-if="breadcrumbs" class="px-0">
+                            <v-icon size="15">mdi-chevron-right</v-icon>
+                        </template>
+                        <template v-slot:title="{ item }">
+                            <p>{{ item.text }}</p>
+                        </template>
+                    </v-breadcrumbs>
+                </div>
+            </div>
+            <div>
+                <BreadcrumbChart />
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- [ breadcrumb ] end -->
 </template>
 
 <style lang="scss">
-.page-header {
-  nav {
-    .breadcrumb {
-      margin-bottom: 0;
+.page-breadcrumb {
+    .v-toolbar {
+        background: transparent;
     }
-    .breadcrumb-item {
-      &.active {
-        color: inherit;
-      }
-    }
-  }
 }
 </style>

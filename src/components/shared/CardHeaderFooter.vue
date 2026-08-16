@@ -1,33 +1,24 @@
 <script setup lang="ts">
-/**
- * CardHeaderFooter Component
- *
- * @component CardHeaderFooter
- * @description A reusable card component that includes customizable header and footer sections using Bootstrap Vue.
- * The header displays a title and an optional caption, while default slot content is rendered in the body.
- * A named `footer` slot allows for flexible footer customization.
- * @prop {string} title - The title displayed in the card header.
- * @prop {string} [caption] - An optional caption displayed below the title in the card header.
- */
-
-// third party
-import { BCard } from "bootstrap-vue-next";
-
 const props = defineProps({
-  title: String,
-  caption: String,
+    title: String
 });
 </script>
 
 <template>
-  <BCard>
-    <template #header>
-      <h5>{{ props.title }}</h5>
-      <p class="f-12" v-if="props.caption" v-html="props.caption"></p>
-    </template>
-    <slot />
-    <template #footer>
-      <slot name="footer" />
-    </template>
-  </BCard>
+    <!-- -------------------------------------------------------------------- -->
+    <!-- Card with Header & Footer -->
+    <!-- -------------------------------------------------------------------- -->
+    <v-card variant="outlined" elevation="0" >
+        <v-card-item>
+            <v-card-title class="text-18">{{ title }}</v-card-title>
+        </v-card-item>
+        <v-divider></v-divider>
+        <v-card-text>
+            <slot />
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+            <slot name="footer" />
+        </v-card-actions>
+    </v-card>
 </template>

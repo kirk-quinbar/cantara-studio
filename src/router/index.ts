@@ -1,31 +1,32 @@
-import { createRouter, createWebHistory } from "vue-router";
-import MainRoutes from "./MainRoutes";
-import PublicRoutes from "./PublicRoutes";
-import { useUIStore } from "@/stores/ui";
+import { createRouter, createWebHistory } from 'vue-router';
+import MainRoutes from './MainRoutes';
+import AuthRoutes from './AuthRoutes';
+import { useAuthStore } from '@/stores/auth';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [PublicRoutes, MainRoutes],
-  scrollBehavior() {
-    return { top: 0 };
-  },
+export const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: '/:pathMatch(.*)*',
+            component: () => import('@/views/authentication/Error.vue')
+        },
+        MainRoutes,
+        AuthRoutes
+    ]
 });
 
-// Navigation Guard to Change Title
-router.beforeEach((to, from, next) => {
-  const appTitle = import.meta.env.VITE_APP_TITLE;
-  document.title = to.meta.title ? `${to.meta.title} | ${appTitle}` : appTitle;
-  next();
-});
+router.beforeEach(async (to, from, next) => {
+    // redirect to login page if not logged in and trying to access a restricted page
+    const publicPages = ['/auth/login'];
+    const authRequired = !publicPages.includes(to.path);
+    const auth: any = useAuthStore();
 
-router.beforeEach(() => {
-  const uiStore = useUIStore();
-  uiStore.isLoading = true;
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (authRequired && !auth.user) {
+            auth.returnUrl = to.fullPath;
+            return next('/auth/login');
+        } else next();
+    } else {
+        next();
+    }
 });
-
-router.afterEach(() => {
-  const uiStore = useUIStore();
-  uiStore.isLoading = false;
-});
-
-export default router;
