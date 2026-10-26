@@ -1,6 +1,6 @@
 {
-    "name": "materialpro-vue",
-    "version": "7.1.0",
+    "name": "cantara-studio",
+    "version": "1.0.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
