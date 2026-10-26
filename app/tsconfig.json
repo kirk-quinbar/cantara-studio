@@ -1,0 +1,18 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "compilerOptions": {
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowJs": true,
+    "ignoreDeprecations": "5.0",
+    "types": ["vuetify", "vite/client"]
+  },
+  "references": [
+    {
+      "path": "./tsconfig.vite-config.json"
+    }
+  ]
+}
